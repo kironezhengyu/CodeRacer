@@ -41,6 +41,11 @@ var App = function() {
 		  res.render('home');
     });
 
+    app.get('/code', function(req, res){
+      console.log('at code page');
+          res.render('code');
+    });
+
     app.get('/testwolfram', function(req, res) {
       var url = "http://api.wolframalpha.com/v2/query?input=france&appid=866XWU-2AJUY924VK&output=json";
       request(url, function(err, resp, body) {

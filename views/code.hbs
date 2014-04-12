@@ -1,0 +1,25 @@
+<div id="code" class="container">
+
+	<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">The Challenge</h3>
+	</div>
+	<div class="panel-body">
+		The question will be displayed here...!
+	</div>
+	</div>
+
+    <pre id="editor">function foo(items) {
+	    var i;
+	    for (i = 0; i &lt; items.length; i++) {
+	        alert("Ace Rocks " + items[i]);
+	    }
+	}</pre>
+	    
+	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+	    var editor = ace.edit("editor");
+	    editor.setTheme("ace/theme/twilight");
+	    editor.getSession().setMode("ace/mode/javascript");
+	</script>
+</div>
