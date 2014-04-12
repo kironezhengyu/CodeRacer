@@ -12,6 +12,7 @@ var express = require('express'),
   });
 
 var wolframAppId = "866XWU-2AJUY924VK";
+var myRootRef = new Firebase('https://flickering-fire-9251.firebaseio.com/');
 
 // ===== App config ============================================================
 var App = function() {
@@ -35,7 +36,18 @@ var App = function() {
     }));
 
     // ===== Routes =============================================================
-    app.get('/login', function(req, res) {
+  app.get('/user', apiRestrict, function(req, res) {
+    var displayName = myRootRef.child("users").child("facebook:"+req.session.user).child('displayName');
+    request(displayName + ".json", function(err, resp, body) {
+      if (!err) {
+        res.render('user', {user: req.session.user, displayName: body});
+      } else {
+        res.render('user', {user: req.session.user, displayName: 'Not logged in!'});
+      }
+    });
+  });
+
+  app.get('/login', function(req, res) {
       var hash = req.query.id;
       req.session.user = hash;
       console.log('id: ' + hash);
