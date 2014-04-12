@@ -20,6 +20,7 @@ var App = function() {
     }));
     app.set('view engine', 'hbs');
     app.set('views', __dirname + '/views');
+    app.use(express.static(__dirname + '/public'));
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser('whatever'));
