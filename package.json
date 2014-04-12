@@ -12,7 +12,8 @@
     "grunt": "0.4.2",
     "express-resource": "1.0.0",
     "moment": "2.5.0",
-    "async": "0.2.10"
+    "async": "0.2.10",
+    "firebase": ""
   },
   "scripts": {
     "start" : "node app.js"

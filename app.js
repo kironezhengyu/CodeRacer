@@ -5,7 +5,10 @@ var express = require('express'),
 	app = express(),
 	exphbs = require('express3-handlebars'),
 	_ = require('underscore'),
+  Firebase = require('firebase'),
   http = require('http');
+
+var fbRoot = new Firebase('https://flickering-fire-9251.firebaseio.com/');
 
 // ===== App config ============================================================
 var App = function() {
@@ -23,11 +26,7 @@ var App = function() {
 
     // Setup the session.
     app.use(express.session({
-        //store: sessionStore,
         secret: 'Ekn7vgFA9nka8bHCV9bz5Mo2',
-
-        // Cookie max age:
-        // 30min/1800000ms   5min/300000 ms   1min/60000ms
         cookie: { maxAge: 1800000 }
     }));
 
