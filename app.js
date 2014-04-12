@@ -37,10 +37,18 @@ var App = function() {
     // ===== Routes =============================================================
     app.get('/login', function(req, res) {
       var hash = req.query.id;
+      req.session.user = hash;
       console.log('id: ' + hash);
+      res.redirect('/');
     });
 
-    app.get('/', function(req, res){
+    app.get('/logout', function(req, res) {
+      req.session.destroy(function() {
+        res.redirect('/');
+      });
+    });
+
+    app.get('/', apiRestrict, function(req, res){
       console.log('at home page');
       /*
       $('#pano')('qin', 50, function(err, buffer) {
@@ -52,15 +60,15 @@ var App = function() {
         }
       });
       */
-      res.render('home');
+      res.render('home', {user: req.session.user});
     });
 
-    app.get('/code', function(req, res){
+    app.get('/code', apiRestrict, function(req, res){
       console.log('at code page');
-      res.render('code2');
+      res.render('code2', {user: req.session.user});
     });
 
-    app.get('/testwolfram', function(req, res) {
+    app.get('/testwolfram', apiRestrict, function(req, res) {
       var str = "abs(-7)^3 - floor(19/3)";
       var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid="+wolframAppId+"&output=json";
       request(url, function(err, resp, body) {
@@ -69,27 +77,15 @@ var App = function() {
       });
     });
 
-    app.get('/testeval', function(req, res) {
+    app.get('/testeval', apiRestrict, function(req, res) {
       var str = "(function () { var sum=0; for (var i=0; i<5; i++) { sum+=i; } return sum}())";
       var result = eval(str);
       console.log(result);
       res.send(result + "");
     });
 
-    app.get('/testrdio', function(req, res) {
+    app.get('/testrdio', apiRestrict, function(req, res) {
       // :(
-    });
-
-    app.get('/login', function(req, res) {
-      auth.login('facebook', {
-        rememberMe: true
-      });
-      //res.redirect('/auth/facebook');
-    });
-
-    app.get('/logout', function(req, res) {
-      req.logout();
-      res.redirect('/');
     });
 
     // ==== Sockets ===========================================================
@@ -102,4 +98,13 @@ var App = function() {
 
 var start = new App();
 
-
+function apiRestrict(req, res, next) {
+  console.log("req.session.user: " + JSON.stringify(req.session)); // TEMP
+  if (req.session.user) {
+    console.log('logged in');
+    next();
+  } else {
+    console.log('logged out');
+    res.render('home', {user: req.session.user});
+  }
+}
