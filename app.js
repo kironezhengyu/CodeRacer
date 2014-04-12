@@ -107,10 +107,7 @@ var App = function() {
     });
 
     // ==== Sockets ===========================================================
-    var io = SocketIo.listen(app.listen(3000));
-    io.sockets.on('connection', function(socket) {
-      socket.emit('message', {message: 'You have connected!'});
-    });
+    app.listen(3000);
     console.log('Listening on port 3000');
 };
 
