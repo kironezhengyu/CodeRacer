@@ -54,6 +54,11 @@
                 <li><a href="#">Arithmetic</a></li>
               </ul>
             </li>
+            <li>
+            {{#if user}}
+              <a href="/user">Profile</a>
+            {{/if}}
+            </li>
             <li id="login">
               {{#if user}}
                 <button type="button" id="logoutButton" class="btn btn-warning">Log out</button>
