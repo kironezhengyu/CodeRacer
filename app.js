@@ -68,6 +68,11 @@ var App = function() {
       res.render('home');
     });
 
+    app.get('/code', function(req, res){
+      console.log('at code page');
+          res.render('code');
+    });
+
     app.get('/testwolfram', function(req, res) {
       var str = "abs(-7)^3 - floor(19/3)";
       var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid="+wolframAppId+"&output=json";
