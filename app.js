@@ -9,14 +9,14 @@ var express = require('express'),
 
 // ===== App config ============================================================
 var App = function() {
-    app.engine('.hbs', exphbs({
+    app.engine('hbs', exphbs({
         extname: '.hbs',
         defaultLayout: 'layout',
-        layoutsDir: app.get('views') + '/'
+        layoutsDir: 'views/'
     }));
-    app.set('view engine', '.hbs');
+    app.set('view engine', 'hbs');
+    app.set('views', __dirname + '/views');
     app.use(express.bodyParser());
-    app.use('/public', express.static(__dirname + '/public'));
     app.use(express.methodOverride());
     app.use(express.cookieParser('whatever'));
     app.disable('x-powered-by');
@@ -33,8 +33,8 @@ var App = function() {
 
     // ===== Routes ================================================================
     app.get('/', function(req, res){
-        console.log('at home page');
-		res.send('hello world!');
+      console.log('at home page');
+		  res.render('home');
     });
 
     // ==== STARTING ===========================================================
