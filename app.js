@@ -9,9 +9,7 @@ var express = require('express'),
   Rdio = require('rdio') ({
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
     rdio_api_shared: "gG67CNrJKB"
-  }),
-  $ = require('jquery'),
-  server = http.createServer(app);
+  });
 
 var wolframAppId = "866XWU-2AJUY924VK";
 
@@ -38,8 +36,8 @@ var App = function() {
 
     // ===== Routes =============================================================
     app.get('/login', function(req, res) {
-      var hash = req.query.hash;
-      console.log('hash: ' + hash);
+      var hash = req.query.id;
+      console.log('id: ' + hash);
     });
 
     app.get('/', function(req, res){
@@ -59,7 +57,7 @@ var App = function() {
 
     app.get('/code', function(req, res){
       console.log('at code page');
-          res.render('code');
+      res.render('code2');
     });
 
     app.get('/testwolfram', function(req, res) {
@@ -94,18 +92,12 @@ var App = function() {
       res.redirect('/');
     });
 
-    // ==== STARTING ===========================================================
-    app.listen(3000);
-    var io = SocketIo.listen(server);
-    console.log('Listening on port 3000');
-
     // ==== Sockets ===========================================================
+    var io = SocketIo.listen(app.listen(3000));
     io.sockets.on('connection', function(socket) {
-      socket.emit('message', {message: 'TEST: You have connected!'});
-      socket.on('send', function(data) {
-        io.sockets.emit('message', data);
-      });
+      socket.emit('message', {message: 'You have connected!'});
     });
+    console.log('Listening on port 3000');
 };
 
 var start = new App();
