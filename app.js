@@ -7,8 +7,13 @@ var express = require('express'),
 	_ = require('underscore'),
   Firebase = require('firebase'),
   SocketIo = require('socket.io'),
-  resquest = require('request'),
+  request = require('request'),
   http = require('http'),
+  Rdio = require('rdio') ({
+    rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
+    rdio_api_shared: "gG67CNrJKB",
+    callback_url: "/oauth/callback"
+  }),
   server = http.createServer(app);
 
 var fbRoot = new Firebase('https://flickering-fire-9251.firebaseio.com/');
@@ -47,10 +52,23 @@ var App = function() {
     });
 
     app.get('/testwolfram', function(req, res) {
-      var url = "http://api.wolframalpha.com/v2/query?input=france&appid=866XWU-2AJUY924VK&output=json";
+      var str = "abs(-7)^3 - floor(19/3)";
+      var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid="+wolframAppId+"&output=json";
       request(url, function(err, resp, body) {
+        var jsonBody = JSON.parse(body);
         res.send(body);
       });
+    });
+
+    app.get('/testeval', function(req, res) {
+      var str = "(function () { var sum=0; for (var i=0; i<5; i++) { sum+=i; } return sum}())";
+      var result = eval(str);
+      console.log(result);
+      res.send(result + "");
+    });
+
+    app.get('/testrdio', function(req, res) {
+      // :(
     });
 
     // ==== STARTING ===========================================================
