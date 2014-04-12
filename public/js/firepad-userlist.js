@@ -48,7 +48,7 @@ var FirepadUserList = (function() {
   FirepadUserList.prototype.makeHeading_ = function() {
     var counterSpan = elt('span', '0');
     this.firebaseOn_(this.ref_, 'value', function(usersSnapshot) {
-      setTextContent(counterSpan, "" + usersSnapshot.numChildren());
+      setTextContent(counterSpan, "" + usersSnapshot.numChildren()*0.5);
     });
 
     return elt('div', [
@@ -102,7 +102,7 @@ var FirepadUserList = (function() {
         delete userId2Element[userId];
       }
       var name = userSnapshot.child('name').val();
-      if (typeof name !== 'string') { name = 'Guest'; }
+      if (typeof name !== 'string') { return; }
       name = name.substring(0, 20);
 
       var color = userSnapshot.child('color').val();
