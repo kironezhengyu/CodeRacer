@@ -107,7 +107,7 @@ var App = function() {
     });
 
     // ==== Sockets ===========================================================
-    app.listen(3000);
+    app.listen(process.env.OPENSHIFT_INTERNAL_PORT || 3000, process.env.OPENSHIFT_INTERNAL_IP || '127.0.0.1');
     console.log('Listening on port 3000');
 };
 
