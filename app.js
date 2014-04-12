@@ -9,7 +9,8 @@ var express = require('express'),
   Rdio = require('rdio') ({
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
     rdio_api_shared: "gG67CNrJKB"
-  });
+  }),
+  test = require('unit.js');
 
 var wolframAppId = "866XWU-2AJUY924VK";
 var myRootRef = new Firebase('https://flickering-fire-9251.firebaseio.com/');
@@ -78,6 +79,11 @@ var App = function() {
     app.get('/code', apiRestrict, function(req, res){
       console.log('at code page');
       res.render('code2', {user: req.session.user});
+    });
+
+    app.get('/math', apiRestrict, function(req, res){
+      console.log('at math page');
+      res.render('math', {user: req.session.user});
     });
 
     app.get('/testwolfram', apiRestrict, function(req, res) {
