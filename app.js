@@ -7,7 +7,7 @@ var express = require('express'),
 	_ = require('underscore'),
   Firebase = require('firebase'),
   SocketIo = require('socket.io'),
-  resquest = require('request'),
+  request = require('request'),
   http = require('http'),
   server = http.createServer(app);
 
@@ -42,7 +42,8 @@ var App = function() {
     });
 
     app.get('/testwolfram', function(req, res) {
-      var url = "http://api.wolframalpha.com/v2/query?input=france&appid=866XWU-2AJUY924VK&output=json";
+      var str = "abs(-7)^3 - floor(19/3)";
+      var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid=866XWU-2AJUY924VK&output=json";
       request(url, function(err, resp, body) {
         res.send(body);
       });
