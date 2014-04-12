@@ -9,8 +9,7 @@ var express = require('express'),
   Rdio = require('rdio') ({
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
     rdio_api_shared: "gG67CNrJKB"
-  }),
-  test = require('unit.js');
+  });
 
 var wolframAppId = "866XWU-2AJUY924VK";
 var myRootRef = new Firebase('https://flickering-fire-9251.firebaseio.com/');
