@@ -1,5 +1,6 @@
 <div id="code" class="container">
 
+  <!--
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">The Challenge</h3>
@@ -8,7 +9,12 @@
       The question will be displayed here...!
     </div>
   </div>
+  -->
 
+  <div id="userList"></div>
+  <div id="firepad"></div>
+
+  <!--
   <div class="col-sm-8">
 	    <pre id="editor">function foo(items) {
 		    var i;
@@ -29,16 +35,25 @@
     </div>
     <button id="exeBtn" class="btn btn-primary">Execute</button>
   </div>
+  -->
 
-  <script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/code.js" type="text/javascript" charset="utf-8"></script>
   <script>
-    var socket = io.connect();
-    socket.on('message', function(data) {
-      console.log(data.message);
-    });
-    var editor = ace.edit("editor");
+    var editor = ace.edit("firepad");
     editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/javascript");
+    var session = editor.getSession();
+    session.setMode("ace/mode/javascript");
+    session.setUseWrapMode(true);
+    session.setUseWorker(false);
+
+    var myRootRef = getExampleRef();
+    var userId = Math.floor(Math.random() * 9999999999).toString();
+    var firepad = Firepad.fromACE(myRootRef, editor);
+    var firepadUserList = FirepadUserList.fromDiv(myRootRef.child('users'),
+        document.getElementById('userList'), userId);
+    editor.on('ready', function() {
+      if (firepad.isHistoryEmpty()) {
+        firepad.setText('function foo(items) {var i;for (i = 0; i &lt; items.length; i++) {alert("Ace Rocks " + items[i]);}}');
+      }
+    });
   </script>
 </div>
