@@ -1,5 +1,3 @@
-// MARC
-
 var express = require('express'),
   resource = require('express-resource'),
 	app = express(),
@@ -11,12 +9,10 @@ var express = require('express'),
   http = require('http'),
   Rdio = require('rdio') ({
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
-    rdio_api_shared: "gG67CNrJKB",
-    callback_url: "/oauth/callback"
+    rdio_api_shared: "gG67CNrJKB"
   }),
   server = http.createServer(app);
 
-var fbRoot = new Firebase('https://flickering-fire-9251.firebaseio.com/');
 var wolframAppId = "866XWU-2AJUY924VK";
 
 // ===== App config ============================================================
@@ -43,7 +39,7 @@ var App = function() {
     // ===== Routes =============================================================
     app.get('/', function(req, res){
       console.log('at home page');
-		  res.render('home');
+      res.render('home');
     });
 
     app.get('/code', function(req, res){
@@ -69,6 +65,18 @@ var App = function() {
 
     app.get('/testrdio', function(req, res) {
       // :(
+    });
+
+    app.get('/login', function(req, res) {
+      auth.login('facebook', {
+        rememberMe: true
+      });
+      //res.redirect('/auth/facebook');
+    });
+
+    app.get('/logout', function(req, res) {
+      req.logout();
+      res.redirect('/');
     });
 
     // ==== STARTING ===========================================================

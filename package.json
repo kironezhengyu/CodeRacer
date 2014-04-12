@@ -16,7 +16,9 @@
     "firebase": "",
     "socket.io": "",
     "request": "",
-    "rdio": ""
+    "rdio": "",
+    "passport": "",
+    "passport-facebook": ""
   },
   "scripts": {
     "start" : "node app.js"
