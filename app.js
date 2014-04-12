@@ -49,6 +49,13 @@ var App = function() {
       });
     });
 
+    app.get('/testeval', function(req, res) {
+      var str = "(function () { var sum=0; for (var i=0; i<5; i++) { sum+=i; } return sum}())";
+      var result = eval(str);
+      console.log(result);
+      res.send(result + "");
+    });
+
     // ==== STARTING ===========================================================
     app.listen(3000);
     var io = SocketIo.listen(server);
