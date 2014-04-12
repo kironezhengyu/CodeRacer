@@ -11,32 +11,9 @@ var express = require('express'),
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
     rdio_api_shared: "gG67CNrJKB"
   }),
-  passport = require('passport'),
-  FacebookStrategy = require('passport-facebook').Strategy,
   server = http.createServer(app);
 
-var fbRoot = new Firebase('https://flickering-fire-9251.firebaseio.com/');
 var wolframAppId = "866XWU-2AJUY924VK";
-var FACEBOOK_APP_ID = '625022630924321';
-var FACEBOOK_APP_SECRET = '5cfa9703984a107068ef4a1fcfc0c50c';
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-passport.use(new FacebookStrategy({
-  clientID: FACEBOOK_APP_ID,
-  clientSecret: FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/callback"
-}, function(accessToken, refreshToken, profile, done) {
-  process.nextTick(function() {
-    return done(null, profile);
-  });
-}));
 
 // ===== App config ============================================================
 var App = function() {
@@ -51,9 +28,6 @@ var App = function() {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser('whatever'));
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(app.router);
     app.disable('x-powered-by');
 
     // Setup the session.
@@ -94,25 +68,15 @@ var App = function() {
     });
 
     app.get('/login', function(req, res) {
-      res.redirect('/auth/facebook');
+      auth.login('facebook', {
+        rememberMe: true
+      });
+      //res.redirect('/auth/facebook');
     });
 
     app.get('/logout', function(req, res) {
       req.logout();
       res.redirect('/');
-    });
-
-    app.get('/auth/facebook',
-      passport.authenticate('facebook'),
-      function(req, res){
-        // The request will be redirected to Facebook for authentication, so this
-        // function will not be called.
-    });
-
-    app.get('/auth/facebook/callback',
-      passport.authenticate('facebook', { failureRedirect: '/login' }),
-      function(req, res) {
-        res.redirect('/');
     });
 
     // ==== STARTING ===========================================================
