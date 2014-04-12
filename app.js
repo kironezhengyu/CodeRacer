@@ -1,5 +1,4 @@
 var express = require('express'),
-  resource = require('express-resource'),
 	app = express(),
 	exphbs = require('express3-handlebars'),
 	_ = require('underscore'),
@@ -10,10 +9,10 @@ var express = require('express'),
   Rdio = require('rdio') ({
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
     rdio_api_shared: "gG67CNrJKB"
-  }),
-  server = http.createServer(app);
+  });
 
 var wolframAppId = "866XWU-2AJUY924VK";
+var myRootRef = new Firebase('https://flickering-fire-9251.firebaseio.com/');
 
 // ===== App config ============================================================
 var App = function() {
@@ -37,17 +36,51 @@ var App = function() {
     }));
 
     // ===== Routes =============================================================
-    app.get('/', function(req, res){
+  app.get('/user', apiRestrict, function(req, res) {
+    var displayName = myRootRef.child("users").child("facebook:"+req.session.user).child('displayName');
+    request(displayName + ".json", function(err, resp, body) {
+      if (!err) {
+        res.render('user', {user: req.session.user, displayName: body});
+      } else {
+        res.render('user', {user: req.session.user, displayName: 'Not logged in!'});
+      }
+    });
+  });
+
+  app.get('/login', function(req, res) {
+      var hash = req.query.id;
+      req.session.user = hash;
+      console.log('id: ' + hash);
+      res.redirect('/');
+    });
+
+    app.get('/logout', function(req, res) {
+      req.session.destroy(function() {
+        res.redirect('/');
+      });
+    });
+
+    app.get('/', apiRestrict, function(req, res){
       console.log('at home page');
-      res.render('home');
+      /*
+      $('#pano')('qin', 50, function(err, buffer) {
+        if (err) console.log(err);
+        else {
+          var hash = CryptoJS.SHA256(Math.random() + CryptoJS.SHA256(buffer));
+          console.log('hash' + hash);
+          console.log("buffer: " + buffer + "::::" + typeof(buffer));
+        }
+      });
+      */
+      res.render('home', {user: req.session.user});
     });
 
-    app.get('/code', function(req, res){
+    app.get('/code', apiRestrict, function(req, res){
       console.log('at code page');
-          res.render('code');
+      res.render('code2', {user: req.session.user});
     });
 
-    app.get('/testwolfram', function(req, res) {
+    app.get('/testwolfram', apiRestrict, function(req, res) {
       var str = "abs(-7)^3 - floor(19/3)";
       var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid="+wolframAppId+"&output=json";
       request(url, function(err, resp, body) {
@@ -56,43 +89,34 @@ var App = function() {
       });
     });
 
-    app.get('/testeval', function(req, res) {
+    app.get('/testeval', apiRestrict, function(req, res) {
       var str = "(function () { var sum=0; for (var i=0; i<5; i++) { sum+=i; } return sum}())";
       var result = eval(str);
       console.log(result);
       res.send(result + "");
     });
 
-    app.get('/testrdio', function(req, res) {
+    app.get('/testrdio', apiRestrict, function(req, res) {
       // :(
     });
 
-    app.get('/login', function(req, res) {
-      auth.login('facebook', {
-        rememberMe: true
-      });
-      //res.redirect('/auth/facebook');
-    });
-
-    app.get('/logout', function(req, res) {
-      req.logout();
-      res.redirect('/');
-    });
-
-    // ==== STARTING ===========================================================
-    app.listen(3000);
-    var io = SocketIo.listen(server);
-    console.log('Listening on port 3000');
-
     // ==== Sockets ===========================================================
+    var io = SocketIo.listen(app.listen(3000));
     io.sockets.on('connection', function(socket) {
-      socket.emit('message', {message: 'TEST: You have connected!'});
-      socket.on('send', function(data) {
-        io.sockets.emit('message', data);
-      });
+      socket.emit('message', {message: 'You have connected!'});
     });
+    console.log('Listening on port 3000');
 };
 
 var start = new App();
 
-
+function apiRestrict(req, res, next) {
+  console.log("req.session.user: " + JSON.stringify(req.session)); // TEMP
+  if (req.session.user) {
+    console.log('logged in');
+    next();
+  } else {
+    console.log('logged out');
+    res.render('home', {user: req.session.user});
+  }
+}
