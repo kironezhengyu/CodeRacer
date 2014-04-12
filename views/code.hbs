@@ -23,14 +23,16 @@
 			<div class="panel-heading">
 				<h3 class="panel-title">Console</h3>
 			</div>
-			<div class="panel-body">
-				Things...
+			<div class="panel-body" id="consoleOutput">
+
 			</div>
 		</div>
+		<button id="exeBtn" class="btn btn-primary">Execute</button>
 	</div>
 
 	    
 	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/code.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 	    var editor = ace.edit("editor");
 	    editor.setTheme("ace/theme/twilight");
