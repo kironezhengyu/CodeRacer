@@ -9,8 +9,7 @@ var express = require('express'),
   Rdio = require('rdio') ({
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
     rdio_api_shared: "gG67CNrJKB"
-  }),
-  test = require('unit.js');
+  });
 
 var wolframAppId = "866XWU-2AJUY924VK";
 var myRootRef = new Firebase('https://flickering-fire-9251.firebaseio.com/');
@@ -46,6 +45,17 @@ var App = function() {
         res.render('user', {user: req.session.user, displayName: 'Not logged in!'});
       }
     });
+  });
+
+  app.get('/username', apiRestrict, function(req, res) {
+      var displayName = myRootRef.child("users").child("facebook:"+req.session.user).child('displayName');
+      request(displayName + ".json", function(err, resp, body) {
+        if (!err) {
+            res.json(body.replace(/"/g, ""));
+        } else {
+            res.json('Guest');
+        }
+      });
   });
 
   app.get('/login', function(req, res) {
@@ -107,7 +117,7 @@ var App = function() {
     });
 
     // ==== Sockets ===========================================================
-    app.listen(3000);
+    app.listen(process.env.OPENSHIFT_INTERNAL_PORT || 3000, process.env.OPENSHIFT_INTERNAL_IP || '127.0.0.1');
     console.log('Listening on port 3000');
 };
 
