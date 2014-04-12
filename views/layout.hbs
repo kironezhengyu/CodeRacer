@@ -57,8 +57,13 @@
                     console.log(err);
                   } else if (user) {
                     // user authenticated with Firebase
-                    console.log(user);
-                    fbRoot.push({displayName: user.displayName, provider: user.provider, id: user.id});
+                    fbRoot.child("users").child(user.uid).set({displayName: user.displayName, provider: user.provider, id: user.id});
+                    var hash = user.uid.substring(user.uid.indexOf(":")+1);
+                    $.ajax({
+                      type: 'GET',
+                      url: '/login',
+                      data: {id: hash}
+                    });
                   } else {
                     // user is logged out
                     console.log('logged out');
@@ -73,6 +78,7 @@
               </script>
             </li>
           </ul>
+          <div id="identi"></div>
           <form class="navbar-form navbar-right" role="search">
             <div class="form-group">
               <input type="text" class="form-control" placeholder="Search Friends">

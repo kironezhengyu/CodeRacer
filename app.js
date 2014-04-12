@@ -1,5 +1,4 @@
 var express = require('express'),
-  resource = require('express-resource'),
 	app = express(),
 	exphbs = require('express3-handlebars'),
 	_ = require('underscore'),
@@ -11,6 +10,7 @@ var express = require('express'),
     rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
     rdio_api_shared: "gG67CNrJKB"
   }),
+  $ = require('jquery'),
   server = http.createServer(app);
 
 var wolframAppId = "866XWU-2AJUY924VK";
@@ -37,8 +37,23 @@ var App = function() {
     }));
 
     // ===== Routes =============================================================
+    app.get('/login', function(req, res) {
+      var hash = req.query.hash;
+      console.log('hash: ' + hash);
+    });
+
     app.get('/', function(req, res){
       console.log('at home page');
+      /*
+      $('#pano')('qin', 50, function(err, buffer) {
+        if (err) console.log(err);
+        else {
+          var hash = CryptoJS.SHA256(Math.random() + CryptoJS.SHA256(buffer));
+          console.log('hash' + hash);
+          console.log("buffer: " + buffer + "::::" + typeof(buffer));
+        }
+      });
+      */
       res.render('home');
     });
 
