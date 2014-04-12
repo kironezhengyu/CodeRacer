@@ -9,6 +9,11 @@ var express = require('express'),
   SocketIo = require('socket.io'),
   request = require('request'),
   http = require('http'),
+  Rdio = require('rdio') ({
+    rdio_api_key: "tw5mdr7bqad9van8kt7hzrs2",
+    rdio_api_shared: "gG67CNrJKB",
+    callback_url: "/oauth/callback"
+  }),
   server = http.createServer(app);
 
 var fbRoot = new Firebase('https://flickering-fire-9251.firebaseio.com/');
@@ -43,8 +48,9 @@ var App = function() {
 
     app.get('/testwolfram', function(req, res) {
       var str = "abs(-7)^3 - floor(19/3)";
-      var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid=866XWU-2AJUY924VK&output=json";
+      var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid="+wolframAppId+"&output=json";
       request(url, function(err, resp, body) {
+        var jsonBody = JSON.parse(body);
         res.send(body);
       });
     });
@@ -54,6 +60,10 @@ var App = function() {
       var result = eval(str);
       console.log(result);
       res.send(result + "");
+    });
+
+    app.get('/testrdio', function(req, res) {
+      // :(
     });
 
     // ==== STARTING ===========================================================

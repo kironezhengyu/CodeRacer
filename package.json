@@ -15,7 +15,8 @@
     "async": "0.2.10",
     "firebase": "",
     "socket.io": "",
-    "request": ""
+    "request": "",
+    "rdio": ""
   },
   "scripts": {
     "start" : "node app.js"
