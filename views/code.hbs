@@ -46,22 +46,27 @@
 			session.setUseWrapMode(true);
 			session.setUseWorker(false);
 			session.setMode("ace/mode/javascript");
-			session.setUseWrapMode(true);
-			session.setUseWorker(false);
 			console.log(session);
-    		var userId = Math.floor(Math.random() * 9999999999).toString();
-    		var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
-        		document.getElementById('userList'), userId);
-	  
-	      	//// Create Firepad.
-	      	var firepad = Firepad.fromACE(firepadRef, editor);
-	      
-	      	//// Initialize contents.
-	      	firepad.on('ready', function() {
-	        	if (firepad.isHistoryEmpty()) {
-	          		firepad.setText('// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}');
-	        	}
-	      	});
+            $.ajax({
+                type: 'GET',
+                url: '/username',
+                success: function(data) {
+                    console.log(data);
+                    var userId = Math.floor(Math.random() * 9999999999).toString();
+                    var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
+                            document.getElementById('userList'), userId, data);
+
+                    //// Create Firepad.
+                    var firepad = Firepad.fromACE(firepadRef, editor);
+
+                    //// Initialize contents.
+                    firepad.on('ready', function() {
+                        if (firepad.isHistoryEmpty()) {
+                            firepad.setText('// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}');
+                        }
+                    });
+                }
+            });
 	    };
 
 

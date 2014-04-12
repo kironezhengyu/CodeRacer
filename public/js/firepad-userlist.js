@@ -1,14 +1,18 @@
 var FirepadUserList = (function() {
-  function FirepadUserList(ref, place, userId) {
-    if (!(this instanceof FirepadUserList)) { return new FirepadUserList(ref, place, userId); }
+  function FirepadUserList(ref, place, userId, name) {
+    if (!(this instanceof FirepadUserList)) { return new FirepadUserList(ref, place, userId, name); }
 
     this.ref_ = ref;
     this.userId_ = userId;
     this.place_ = place;
+    this.name = name;
     this.firebaseCallbacks_ = [];
 
     var self = this;
-    this.displayName_ = 'Guest ' + Math.floor(Math.random() * 1000);
+    if (name === "Guest") {
+        name = 'Guest ' + Math.floor(Math.random() * 1000);
+    }
+    this.displayName_ = name;
     this.firebaseOn_(ref.root().child('.info/connected'), 'value', function(s) {
       if (s.val() === true && self.displayName_) {
         var nameRef = ref.child(self.userId_).child('name');

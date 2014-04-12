@@ -47,6 +47,17 @@ var App = function() {
     });
   });
 
+  app.get('/username', apiRestrict, function(req, res) {
+      var displayName = myRootRef.child("users").child("facebook:"+req.session.user).child('displayName');
+      request(displayName + ".json", function(err, resp, body) {
+        if (!err) {
+            res.json(body.replace(/"/g, ""));
+        } else {
+            res.json('Guest');
+        }
+      });
+  });
+
   app.get('/login', function(req, res) {
       var hash = req.query.id;
       req.session.user = hash;
