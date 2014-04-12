@@ -78,7 +78,7 @@ var App = function() {
 
     app.get('/code', apiRestrict, function(req, res){
       console.log('at code page');
-      res.render('code2', {user: req.session.user});
+      res.render('code', {user: req.session.user});
     });
 
     app.get('/math', apiRestrict, function(req, res){

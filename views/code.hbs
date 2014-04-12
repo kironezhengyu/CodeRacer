@@ -8,14 +8,16 @@
 			The question will be displayed here...!
 		</div>
 	</div>
-
-	<div class="col-sm-8">
-	    <pre id="editor">
-function fib(n){}
-fib(5);
-		</pre>
+	
+	<div class="col-sm-3">
+		<div id="userList"></div>	
 	</div>
-	<div class="col-sm-4" style="padding-right: 0;">
+
+	<div class="col-sm-6">
+
+		<div id="firepad-container"></div>
+	</div>
+	<div class="col-sm-3" style="padding-right: 0;">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">Console</h3>
@@ -30,9 +32,38 @@ fib(5);
 	    
 	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/code.js" type="text/javascript" charset="utf-8"></script>
-	<script>
-	    var editor = ace.edit("editor");
-	    editor.setTheme("ace/theme/twilight");
-	    editor.getSession().setMode("ace/mode/javascript");
-	</script>
+	  <script>
+	    window.onload = function() {
+	      //// Initialize Firebase.
+			var firepadRef = getExampleRef();
+			// TODO: Replace above line with:
+			// var ref = new Firebase('<YOUR FIREBASE URL>');
+
+			//// Create ACE
+			var editor = ace.edit("firepad-container");
+			editor.setTheme("ace/theme/twilight");
+			var session = editor.getSession();
+			session.setUseWrapMode(true);
+			session.setUseWorker(false);
+			session.setMode("ace/mode/javascript");
+			session.setUseWrapMode(true);
+			session.setUseWorker(false);
+			console.log(session);
+    		var userId = Math.floor(Math.random() * 9999999999).toString();
+    		var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
+        		document.getElementById('userList'), userId);
+	  
+	      	//// Create Firepad.
+	      	var firepad = Firepad.fromACE(firepadRef, editor);
+	      
+	      	//// Initialize contents.
+	      	firepad.on('ready', function() {
+	        	if (firepad.isHistoryEmpty()) {
+	          		firepad.setText('// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}');
+	        	}
+	      	});
+	    };
+
+
+	  </script>
 </div>
