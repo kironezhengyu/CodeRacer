@@ -5406,9 +5406,13 @@ firepad.Firepad = (function(global) {
   };
 
   Firepad.prototype.addPoweredByLogo_ = function() {
-    var poweredBy = utils.elt('a', null, { 'class': 'powered-by-firepad'} );
-    poweredBy.setAttribute('href', 'http://www.firepad.io/');
-    poweredBy.setAttribute('target', '_blank');
+
+    var poweredBy = utils.elt('button', null, { 'class': 'btn btn-primary'} );
+    // poweredBy.setAttribute('href', 'http://www.firepad.io/');
+    poweredBy.setAttribute('id', 'exeBtn');
+    //poweredBy.setText('Run!');
+    poweredBy.appendChild(document.createTextNode("Run!"));
+
     this.firepadWrapper_.appendChild(poweredBy)
   };
 

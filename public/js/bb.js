@@ -3,7 +3,8 @@ var View = Backbone.View.extend({
 
   events: {
     'click #loginButton': 'login',
-    'click #logoutButton': 'logout'
+    'click #logoutButton': 'logout',
+    'click #exeBtn': 'execute'
   },
 
   login: function(event) {
@@ -39,5 +40,15 @@ var View = Backbone.View.extend({
       type: 'GET',
       url: '/logout'
     });
+  },
+
+  execute: function(event) {
+    var editor = ace.edit("firepad-container");
+    var codeToExe = editor.getValue();
+    var result = eval(codeToExe);
+    var consolPanel = document.getElementById('consoleOutput');
+    var newNode = document.createElement('p');
+    newNode.appendChild(document.createTextNode(result));
+    $("#consoleOutput").html(newNode);
   }
 });

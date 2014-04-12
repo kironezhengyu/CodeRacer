@@ -1,4 +1,4 @@
-<div id="code" class="container">
+<div id="code" class="container-fluid">
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -9,29 +9,45 @@
 		</div>
 	</div>
 	
-	<div class="col-sm-3">
+	
 		<div id="userList"></div>	
-	</div>
-
-	<div class="col-sm-6">
-
 		<div id="firepad-container"></div>
-	</div>
-	<div class="col-sm-3" style="padding-right: 0;">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">Console</h3>
+
+	<div class="panel panel-default" id ="mConsole">
+	<div class="panel-heading">
+		<h3 class="panel-title" >Console</h3>
 			</div>
 			<div class="panel-body" id="consoleOutput">
-
+			
 			</div>
-		</div>
-		<button id="exeBtn" class="btn btn-primary">Execute</button>
-	</div>
+			</div>
+{{!-- 			<button id="exeBtn" class="btn btn-primary">Execute</button>
+ --}}		
 
-	    
-	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+  <style>
+    html { height: 100%; }
+
+    .firepad-userlist {
+      position: absolute; left: 20px; top: 25%; bottom: 0; height: 50%;
+      width: 175px;
+    }
+    .firepad {
+      position: absolute; left: 175px; top: 25%; bottom: 0; right:20px;height: 50%;
+    }
+
+    #mConsole{
+    	position: absolute; left: 20px; top: 80%; bottom: 0; right:20px;height: 50%;}
+   /* #exeBtn{
+    position: relative; left: 20px; top: 72%; bottom: 20%; right:20px;height: 50;
+
+    }*/
+    }
+  </style>
+
+
 	<script src="/js/code.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	
 	  <script>
 	    window.onload = function() {
 	      //// Initialize Firebase.
@@ -48,7 +64,6 @@
 			session.setMode("ace/mode/javascript");
 			session.setUseWrapMode(true);
 			session.setUseWorker(false);
-			console.log(session);
     		var userId = Math.floor(Math.random() * 9999999999).toString();
     		var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
         		document.getElementById('userList'), userId);
