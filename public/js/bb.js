@@ -17,6 +17,10 @@ var View = Backbone.View.extend({
         // user authenticated with Firebase
         fbRoot.child("users").child(user.uid).set({displayName: user.displayName, provider: user.provider, id: user.id});
         var hash = user.uid.substring(user.uid.indexOf(":")+1);
+        // var loginBtn = document.getElementById('loginButton');
+        // loginBtn.appendChild(document.createTextNode( 'Hello '+ user.displayName));
+
+        $("#loginButton").html( 'Hello '+ user.displayName);
         $.ajax({
           type: 'GET',
           url: '/login',
@@ -25,6 +29,7 @@ var View = Backbone.View.extend({
       } else {
         // user is logged out
         console.log('logged out');
+
       }
     });
     auth.login('facebook');
@@ -33,12 +38,18 @@ var View = Backbone.View.extend({
       var msg = snapshot.val();
       console.log("message: " + msg);
     });
+    // $( document ).ready(function() {
+    //   location.reload();
+    // });
   },
 
   logout: function(event) {
     $.ajax({
       type: 'GET',
       url: '/logout'
+    });
+    $( document ).ready(function() {
+      location.reload();
     });
   },
 
