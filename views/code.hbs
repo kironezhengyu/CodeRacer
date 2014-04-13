@@ -45,15 +45,13 @@
   </style>
 
 
-	<script src="/js/code.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 	
 	  <script>
 	    window.onload = function() {
-            var roomRef = new Firebase('https://flickering-fire-9251.firebaseio.com/rooms/');
-
 	      //// Initialize Firebase.
 			var firepadRef = getExampleRef();
+            var hash = firepadRef.name();
 			// TODO: Replace above line with:
 			// var ref = new Firebase('<YOUR FIREBASE URL>');
 
@@ -69,6 +67,7 @@
             $.ajax({
                 type: 'GET',
                 url: '/username',
+                data: {hash: hash},
                 success: function(data) {
                     console.log(data);
                     var userId = Math.floor(Math.random() * 9999999999).toString();
