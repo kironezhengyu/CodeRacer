@@ -1,0 +1,35 @@
+<div id="queueCode" class="container">
+    <h2>Loading Game...</h2><div id="foo"></div>
+    <script>
+        var opts = {
+            lines: 17, // The number of lines to draw
+            length: 40, // The length of each line
+            width: 30, // The line thickness
+            radius: 60, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 90, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#000', // #rgb or #rrggbb or array of colors
+            speed: 0.7, // Rounds per second
+            trail: 100, // Afterglow percentage
+            shadow: true, // Whether to render a shadow
+            hwaccel: false, // Whether to use hardware acceleration
+            className: 'spinner', // The CSS class to assign to the spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: '0', // Top position relative to parent in px
+            left: '0' // Left position relative to parent in px
+        };
+        var target = document.getElementById('foo');
+        var spinner = new Spinner(opts).spin(target);
+
+        // find game
+        var listRef = new Firebase("https://flickering-fire-9251.firebaseio.com/presence/");
+        listRef.on("value", function(snap) {
+            if (snap.numChildren() >= 2) {
+                var msgData = snap.val();
+                console.log(msgData);
+                window.location = "/codeRace";
+            }
+        });
+    </script>
+</div>
