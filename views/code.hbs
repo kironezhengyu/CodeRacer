@@ -48,11 +48,9 @@
 	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/stopwatch.js" type="text/javascript" charset="utf-8"></script>
 	  <script>
-      	var rand = Math.floor(Math.random() * 4);
-    	var questions = [1, 2, 3, 4];
-    	var i = questions[rand];
-    	var question = new Firebase('https://flickering-fire-9251.firebaseio.com/question/code/easy/' + i);
+    	
 	    window.onload = function() {
+
 	      //// Initialize Firebase.
 			var firepadRef = getExampleRef();
             var hash = firepadRef.name();
@@ -65,9 +63,7 @@
 			var session = editor.getSession();
 			session.setUseWrapMode(true);
 			session.setUseWorker(false);
-			session.setMode("ace/mode/javascript");
-
-			$('#qDesc').html(question.body + '\n' + question.example);
+			session.setMode("ace/mode/javascript");		
 			
 
 			console.log(session);
@@ -87,22 +83,16 @@
                     //// Initialize contents.
                     firepad.on('ready', function() {
                         if (firepad.isHistoryEmpty()) {              
-                            firepad.setText(question.method);
+                            firepad.setText();
                         }
                     });
                 }
             });
+
+			console.log("fuck2");
 	    };
 
-		$("#exeBtn").click(function() {
-			var editor = ace.edit("firepad-container");
-			var codeToExe = editor.getValue();
-			var result = eval(codeToExe);
-			var consolPanel = document.getElementById('consoleOutput');
-			var newNode = document.createElement('p');
-			newNode.appendChild(document.createTextNode(result));
-			$("#consoleOutput").html(newNode);
-		});
+
 	  </script>
 
 	  <div class="modal fade">
