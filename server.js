@@ -13,6 +13,7 @@ var express = require('express'),
 
 var wolframAppId = "866XWU-2AJUY924VK";
 var myRootRef = new Firebase('https://flickering-fire-9251.firebaseio.com/');
+var hashPair = [];
 
 // ===== App config ============================================================
 var App = function() {
@@ -36,7 +37,7 @@ var App = function() {
     }));
 
     // ===== Routes =============================================================
-  app.get('/user', apiRestrict, function(req, res) {
+  app.get('/user', apiRestrictA, function(req, res) {
     var displayName = myRootRef.child("users").child("facebook:"+req.session.user).child('displayName');
     request(displayName + ".json", function(err, resp, body) {
       if (!err) {
@@ -48,6 +49,20 @@ var App = function() {
   });
 
   app.get('/username', apiRestrict, function(req, res) {
+      var hash = req.query.hash;
+      console.log(hash);
+      if (hash) {
+          if (hashPair.length < 2) {
+              hashPair.push(hash);
+          } else if (hashPair === 2) {
+              var roomRef = new Firebase('https://flickering-fire-9251.firebaseio.com/rooms/');
+              roomRef = roomRef.push();
+              roomRef.push(hashPair[0]);
+              roomRef.push(hashPair[1]);
+              hashPair = [];
+          }
+      }
+
       var displayName = myRootRef.child("users").child("facebook:"+req.session.user).child('displayName');
       request(displayName + ".json", function(err, resp, body) {
         if (!err) {
@@ -58,7 +73,16 @@ var App = function() {
       });
   });
 
-  app.get('/userid', apiRestrict, function(req, res) {
+  app.get('/rooms', apiRestrictA, function(req, res) {
+      var roomRef = new Firebase('https://flickering-fire-9251.firebaseio.com/rooms/');
+      var rooms = [];
+      roomRef.forEach(function(child) {
+        rooms.push(child.name());
+      });
+      res.json(rooms);
+  });
+
+  app.get('/userid', apiRestrictA, function(req, res) {
       var uid = "facebook:"+req.session.user;
       console.log(uid);
       res.json(uid);
@@ -71,13 +95,14 @@ var App = function() {
       res.redirect('/');
     });
 
-    app.get('/logout', function(req, res) {
+    app.get('/logout', apiRestrictA, function(req, res) {
       req.session.destroy(function() {
         res.redirect('/');
+          window.location('/');
       });
     });
 
-    app.get('/', apiRestrict, function(req, res){
+    app.get('/', apiRestrictA, function(req, res){
       console.log('at home page');
       /*
       $('#pano')('qin', 50, function(err, buffer) {
@@ -96,7 +121,6 @@ var App = function() {
       console.log('queue page');
         var listRef = new Firebase("https://flickering-fire-9251.firebaseio.com/presence/");
         var userRef = listRef.child('facebook:'+req.session.user);
-
         userRef.set(true);
         // Remove ourselves when we disconnect.
         userRef.onDisconnect().remove();
@@ -108,12 +132,12 @@ var App = function() {
         res.render('code', {user: req.session.user});
     });
 
-    app.get('/math', apiRestrict, function(req, res){
+    app.get('/math', apiRestrictA, function(req, res){
       console.log('at math page');
       res.render('math', {user: req.session.user});
     });
 
-    app.get('/testwolfram', apiRestrict, function(req, res) {
+    app.get('/testwolfram', apiRestrictA, function(req, res) {
       var str = "abs(-7)^3 - floor(19/3)";
       var url = "http://api.wolframalpha.com/v2/query?input="+str+"&appid="+wolframAppId+"&output=json";
       request(url, function(err, resp, body) {
@@ -122,7 +146,7 @@ var App = function() {
       });
     });
 
-    app.get('/testeval', apiRestrict, function(req, res) {
+    app.get('/testeval', apiRestrictA, function(req, res) {
       var str = "(function () { var sum=0; for (var i=0; i<5; i++) { sum+=i; } return sum}())";
       var result = eval(str);
       console.log(result);
@@ -149,4 +173,18 @@ function apiRestrict(req, res, next) {
     console.log('logged out');
     res.render('home', {user: req.session.user});
   }
+}
+
+function apiRestrictA(req, res, next) {
+    console.log('apiRestrictA');
+    var userRef = new Firebase("https://flickering-fire-9251.firebaseio.com/presence/facebook:"+req.session.user);
+    userRef.remove();
+    console.log("req.session.user: " + JSON.stringify(req.session)); // TEMP
+    if (req.session.user) {
+        console.log('logged in');
+        next();
+    } else {
+        console.log('logged out');
+        res.render('home', {user: req.session.user});
+    }
 }
