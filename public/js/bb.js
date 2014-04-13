@@ -38,9 +38,9 @@ var View = Backbone.View.extend({
       var msg = snapshot.val();
       console.log("message: " + msg);
     });
-    // $( document ).ready(function() {
-    //   location.reload();
-    // });
+     $( document ).ready(function() {
+       location.reload();
+     });
   },
 
   logout: function(event) {

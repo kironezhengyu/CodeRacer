@@ -25,7 +25,7 @@
         // find game
         var listRef = new Firebase("https://flickering-fire-9251.firebaseio.com/presence/");
         listRef.on("value", function(snap) {
-            if (snap.numChildren() >= 2) {
+            if (snap.numChildren() % 2 == 0) {
                 var msgData = snap.val();
                 console.log(msgData);
                 window.location = "/codeRace";
