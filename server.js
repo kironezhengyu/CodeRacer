@@ -54,6 +54,7 @@ var App = function() {
       if (hash) {
           if (hashPair.length < 2) {
               hashPair.push(hash);
+              console.log('length: ' + hashPair.length);
           }
           if (hashPair === 2) {
               console.log('2');
