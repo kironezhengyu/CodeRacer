@@ -3,3 +3,13 @@
   -webkit-border-radius:            0px;
   -moz-border-radius:               0px;
 }
+
+#foo {
+    margin-left: 30%;
+    margin-top: 50px;
+    margin-right: auto;
+}
+
+#queueCode h2 {
+    text-align: center;
+}

@@ -48,7 +48,7 @@ var FirepadUserList = (function() {
   FirepadUserList.prototype.makeHeading_ = function() {
     var counterSpan = elt('span', '0');
     this.firebaseOn_(this.ref_, 'value', function(usersSnapshot) {
-      setTextContent(counterSpan, "" + usersSnapshot.numChildren());
+      setTextContent(counterSpan, "" + usersSnapshot.numChildren()*0.5);
     });
 
     return elt('div', [
@@ -102,7 +102,7 @@ var FirepadUserList = (function() {
         delete userId2Element[userId];
       }
       var name = userSnapshot.child('name').val();
-      if (typeof name !== 'string') { name = 'Guest'; }
+      if (typeof name !== 'string') { name = ''; }
       name = name.substring(0, 20);
 
       var color = userSnapshot.child('color').val();
@@ -113,8 +113,7 @@ var FirepadUserList = (function() {
       var colorDiv = elt('div', null, { 'class': 'firepad-userlist-color-indicator' });
       colorDiv.style.backgroundColor = color;
 
-      var nameDiv = elt('div', name || 'Guest', { 'class': 'firepad-userlist-name' });
-
+      var nameDiv = elt('div', name, { 'class': 'firepad-userlist-name' });
       var userDiv = elt('div', [ colorDiv, nameDiv ], { 'class': 'firepad-userlist-user' });
       userId2Element[userId] = userDiv;
 
@@ -125,7 +124,9 @@ var FirepadUserList = (function() {
       }
 
       var nextElement = prevChildName ? userId2Element[prevChildName].nextSibling : userList.firstChild;
-      userList.insertBefore(userDiv, nextElement);
+      if (!name) userList.insertAfter(userDiv, nextElement);
+      else userList.insertBefore(userDiv, nextElement);
+
     }
 
     this.firebaseOn_(this.ref_, 'child_added', updateChild);

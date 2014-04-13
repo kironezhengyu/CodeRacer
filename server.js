@@ -58,6 +58,11 @@ var App = function() {
       });
   });
 
+  app.get('/userid', apiRestrict, function(req, res) {
+      var uid = "facebook:"+req.session.user;
+      res.json(uid);
+  });
+
   app.get('/login', function(req, res) {
       var hash = req.query.id;
       req.session.user = hash;
@@ -87,8 +92,19 @@ var App = function() {
     });
 
     app.get('/code', apiRestrict, function(req, res){
-      console.log('at code page');
-      res.render('code', {user: req.session.user});
+      console.log('queue page');
+        var listRef = new Firebase("https://flickering-fire-9251.firebaseio.com/presence/");
+        var userRef = listRef.child('facebook:'+req.session.user);
+
+        userRef.set(true);
+        // Remove ourselves when we disconnect.
+        userRef.onDisconnect().remove();
+        res.render('queueCode', {user: req.session.user});
+    });
+
+    app.get('/codeRace', apiRestrict, function(req, res) {
+        console.log('at code page');
+        res.render('code', {user: req.session.user});
     });
 
     app.get('/math', apiRestrict, function(req, res){
