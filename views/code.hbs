@@ -48,6 +48,8 @@
 	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/stopwatch.js" type="text/javascript" charset="utf-8"></script>
 	  <script>
+
+
       	var rand = Math.floor(Math.random() * 4);
     	var questions = [1, 2, 3, 4];
     	var i = questions[rand];
@@ -56,6 +58,8 @@
 	      //// Initialize Firebase.
 			var firepadRef = getExampleRef();
             var hash = firepadRef.name();
+            var urlHash = '/code#' + hash;
+            $('#races').append('<tr><td><a href=/"urlHash/">' + hash + '</a></td></tr>');
 			// TODO: Replace above line with:
 			// var ref = new Firebase('<YOUR FIREBASE URL>');
 
@@ -68,7 +72,6 @@
 			session.setMode("ace/mode/javascript");
 
 			$('#qDesc').html(question.body + '\n' + question.example);
-			
 
 			console.log(session);
             $.ajax({

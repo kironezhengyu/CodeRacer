@@ -53,7 +53,7 @@ var View = Backbone.View.extend({
 
       // Number of online users is the number of objects in the presence list.
       listRef.on("child_removed", function(snap) {
-          $('#numActive').html('Currently Playing: ' + snap.numChildren());
+          $('#numActive').html('Currently Playing in Code: ' + snap.numChildren());
       });
   },
 
