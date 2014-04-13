@@ -54,8 +54,10 @@ var App = function() {
       if (hash) {
           if (hashPair.length < 2) {
               hashPair.push(hash);
-          } else if (hashPair === 2) {
-              var roomRef = new Firebase('https://flickering-fire-9251.firebaseio.com/rooms/');
+          }
+          if (hashPair === 2) {
+              console.log('2');
+              var roomRef = new Firebase('https://flickering-fire-9251.firebaseio.com').child('rooms');
               roomRef = roomRef.push();
               roomRef.push(hashPair[0]);
               roomRef.push(hashPair[1]);
@@ -98,7 +100,6 @@ var App = function() {
     app.get('/logout', apiRestrictA, function(req, res) {
       req.session.destroy(function() {
         res.redirect('/');
-          window.location('/');
       });
     });
 
