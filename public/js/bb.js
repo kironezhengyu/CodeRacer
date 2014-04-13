@@ -20,7 +20,7 @@ var View = Backbone.View.extend({
         // var loginBtn = document.getElementById('loginButton');
         // loginBtn.appendChild(document.createTextNode( 'Hello '+ user.displayName));
 
-        $("#loginButton").html( 'Hello '+ user.displayName);
+        $("#loginButton").html('Log out');
         $.ajax({
           type: 'GET',
           url: '/login',
@@ -43,11 +43,18 @@ var View = Backbone.View.extend({
   logout: function(event) {
     $.ajax({
       type: 'GET',
-      url: '/logout'
+      url: '/logout',
+        success: $("#logoutButton").html('Log in')
     });
-    $( document ).ready(function() {
-      location.reload();
-    });
+      var listRef = new Firebase("https://flickering-fire-9251.firebaseio.com/presence/");
+      var userRef = listRef.child('facebook:'+req.session.user);
+
+      userRef.remove();
+
+      // Number of online users is the number of objects in the presence list.
+      listRef.on("child_removed", function(snap) {
+          $('#numActive').html('Currently Playing: ' + snap.numChildren());
+      });
   },
 
   execute: function(event) {

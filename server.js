@@ -60,6 +60,7 @@ var App = function() {
 
   app.get('/userid', apiRestrict, function(req, res) {
       var uid = "facebook:"+req.session.user;
+      console.log(uid);
       res.json(uid);
   });
 
