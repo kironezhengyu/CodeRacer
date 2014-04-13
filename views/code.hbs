@@ -48,12 +48,20 @@
 	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/stopwatch.js" type="text/javascript" charset="utf-8"></script>
 	  <script>
-    	
+
+
+
+      	var rand = Math.floor(Math.random() * 4);
+    	var questions = [1, 2, 3, 4];
+    	var i = questions[rand];
+    	var question = new Firebase('https://flickering-fire-9251.firebaseio.com/question/code/easy/' + i);
 	    window.onload = function() {
 
 	      //// Initialize Firebase.
 			var firepadRef = getExampleRef();
             var hash = firepadRef.name();
+            var urlHash = '/code#' + hash;
+            $('#races').append('<tr><td><a href=/"urlHash/">' + hash + '</a></td></tr>');
 			// TODO: Replace above line with:
 			// var ref = new Firebase('<YOUR FIREBASE URL>');
 
@@ -63,8 +71,11 @@
 			var session = editor.getSession();
 			session.setUseWrapMode(true);
 			session.setUseWorker(false);
-			session.setMode("ace/mode/javascript");		
+	
 			
+			session.setMode("ace/mode/javascript");
+
+			$('#qDesc').html(question.body + '\n' + question.example);
 
 			console.log(session);
             $.ajax({
