@@ -4,7 +4,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title">The Challenge</h3>
 		</div>
-		<div class="panel-body">
+		<div class="panel-body" id="qDesc">
 			The question will be displayed here...!
 		</div>
 	</div>
@@ -48,6 +48,10 @@
 	<script src="/js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/stopwatch.js" type="text/javascript" charset="utf-8"></script>
 	  <script>
+      	var rand = Math.floor(Math.random() * 4);
+    	var questions = [1, 2, 3, 4];
+    	var i = questions[rand];
+    	var question = new Firebase('https://flickering-fire-9251.firebaseio.com/question/code/easy/' + i);
 	    window.onload = function() {
 	      //// Initialize Firebase.
 			var firepadRef = getExampleRef();
@@ -62,6 +66,9 @@
 			session.setUseWrapMode(true);
 			session.setUseWorker(false);
 			session.setMode("ace/mode/javascript");
+
+			$('#qDesc').html(question.body + '\n' + question.example);
+			
 
 			console.log(session);
             $.ajax({
@@ -79,15 +86,23 @@
 
                     //// Initialize contents.
                     firepad.on('ready', function() {
-                        if (firepad.isHistoryEmpty()) {
-                            firepad.setText('// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}');
+                        if (firepad.isHistoryEmpty()) {              
+                            firepad.setText(question.method);
                         }
                     });
                 }
             });
 	    };
 
-
+		$("#exeBtn").click(function() {
+			var editor = ace.edit("firepad-container");
+			var codeToExe = editor.getValue();
+			var result = eval(codeToExe);
+			var consolPanel = document.getElementById('consoleOutput');
+			var newNode = document.createElement('p');
+			newNode.appendChild(document.createTextNode(result));
+			$("#consoleOutput").html(newNode);
+		});
 	  </script>
 
 	  <div class="modal fade">
